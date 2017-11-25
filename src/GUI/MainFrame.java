@@ -185,7 +185,7 @@ public class MainFrame extends JFrame {
 		}
 		else if (game.getRound() == 1) 
 		{
-			int first = ((int) (Math.random() * 10)) % 2;
+			int first = ((int) (Math.random() * 2)) +1;
 			list.add("INDIAN 포커에 오신걸 환영합니다.");
 			list.add("1라운드를 시작하겠습니다.");
 			String currentCoin= String.format("User 코인: %d, Ai 코인: %d",game.getUser().getUserCoin(),game.getAi().getAiCoin());
@@ -198,11 +198,12 @@ public class MainFrame extends JFrame {
 			}
 			else //ai 배팅 시작
 			{
-				game.aiBattingBattle(game.getUser().number(game));
+				String ai = String.format("ai가 배팅한 코인 수는 -> %d", game.aiBattingBattle(game.getUser().number(game)));
+				list.add(ai);
 			}
 
 		} 
-		else if(game.getRound() !=21)//21라운드 수가 아니라면
+		else if(game.getRound() <=10)//10라운드 수가 아니라면
 		{
 			if(game.exhaustion() == true)
 			{
@@ -214,7 +215,7 @@ public class MainFrame extends JFrame {
 				String s= String.format("User 코인: %d, Ai 코인: %d",game.getUser().getUserCoin(),game.getAi().getAiCoin());
 				list.add(s);	
 		}
-		else //라운드 수가 0~21 라운드 넘어가면 
+		else //라운드 수가 10초과인 라운드 넘어가면 
 		{
 			list.add(game.winner());
 		}

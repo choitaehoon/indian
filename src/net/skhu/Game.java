@@ -45,9 +45,34 @@ public class Game {
 	}
 	
 	//ai의 배팅
-	public void aiBattingBattle(int userNumer)
+	public int aiBattingBattle(int userCard) //내카드를 보고 있는 ai가 내카드가 크다면 배팅 갯수적게하고 내카드가 작다면 배팅 갯수 높임
 	{
-		
+		int bet =0;
+		if(userCard == 1)
+		{
+			bet = (int)(Math.random()*5)+1;	
+			ai.aiBetCoin(bet);
+			return bet;
+		}
+		else if(userCard>=2 && userCard<=5) 
+		{
+			bet = (int)(Math.random()*3)+1;
+			ai.aiBetCoin(bet);
+			return bet;
+		}
+		else if(userCard<=6 && userCard<=8)
+		{
+			bet = (int)(Math.random()*1)+1;	
+			ai.aiBetCoin(bet);
+			return bet;
+		}
+		else
+		{
+			bet = (int)(Math.random()*1)+1;	
+			ai.aiBetCoin(bet);
+			return bet;
+		}
 	}
+	
 
 }
