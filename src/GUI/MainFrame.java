@@ -147,7 +147,6 @@ public class MainFrame extends JFrame {
 		die.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				panel.remove(usergui.im(game));
 				panel.add(usergui.changeView(game, 1));
 				changeText(game,1);
@@ -192,14 +191,32 @@ public class MainFrame extends JFrame {
 			list.add(currentCoin);
 			String betFirstMsg = first == 1 ? "사용자가 먼저 배팅을 시작합니다." : "Ai가 먼저 배팅을 시작합니다.";
 			list.add(betFirstMsg);
-			if(first ==1) //사용자 배팅 시작
+			if(first ==1) //사용자 팅 시작
 			{
 				
 			}
 			else //ai 배팅 시작
 			{
-				String ai = String.format("ai가 배팅한 코인 수는 -> %d", game.aiBattingBattle(game.getUser().number(game)));
-				list.add(ai);
+				//aiBattingBattle이 aiDiePercentage보다 더크다면 -> 배팅할 확률이 더크다면
+				if(game.getAi().aiBattingBattle(game.getUser().number(game)) > game.getAi().aiDiePercentage(game.getUser().number(game)))
+				{
+					String ai = String.format("ai가 배팅한 코인 수는 -> %d", game.getAi().aiBattingBattle(game.getUser().number(game)));
+					game.getAi().aiBetCoin(game.getAi().aiBattingBattle(game.getUser().number(game)));
+//이 부분은 사용자 배팅에서 사용자가 코인을 건 만큼 코인 먹는 area					//유저 카드가 더크다면
+//					if(game.getUser().number(game) > game.getAi().number(game))
+//						game.getUser().setCoin(game.getUser().getUserCoin()+game.getAi().aiBattingBattle(game.getUser().number(game)));
+//					//ai 카드가 더크다면
+//					else
+//						game.getAi().setCoin(game.getAi().getAiCoin()+);
+					list.add(ai);
+				}
+				else //죽을 확률이 더크다면
+				{
+					String message = "ai가  고민 하더니 다이했습니다";
+					game.getUser().setCoin(game.getUser().getUserCoin()+1);
+					game.getAi().aiBetCoin(1);
+					list.add(message);
+				}
 			}
 
 		} 
@@ -214,6 +231,7 @@ public class MainFrame extends JFrame {
 				list.add(game.getRound() + "라운드를 시작하겠습니다.");
 				String s= String.format("User 코인: %d, Ai 코인: %d",game.getUser().getUserCoin(),game.getAi().getAiCoin());
 				list.add(s);	
+				
 		}
 		else //라운드 수가 10초과인 라운드 넘어가면 
 		{
