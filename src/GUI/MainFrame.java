@@ -8,6 +8,8 @@ import java.awt.List;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -21,7 +23,7 @@ import net.skhu.Game;
 import net.skhu.User;
 
 //첫 화면 frame
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame{
 	private UserGUI usergui = new UserGUI();
 	private AiGUI aigui = new AiGUI();
 	private Game game;
@@ -83,11 +85,11 @@ public class MainFrame extends JFrame {
 		changeText(game,0);
 		JPanel panel = new JPanel(null);
 		Button batting = new Button("배팅");
-		batting.setBounds(20, 300, 128, 29);
+		batting.setBounds(20, 300, 128, 29); //배팅
 		Button die = new Button("다이");
-		die.setBounds(170, 300, 128, 29);
+		die.setBounds(170, 300, 128, 29); //다이
 		Button cont = new Button("계속");
-		cont.setBounds(330, 300, 128, 29);
+		cont.setBounds(330, 300, 128, 29); //계속
 
 		panel.add(aigui.changeView(game));
 		panel.add(batting);
@@ -189,11 +191,36 @@ public class MainFrame extends JFrame {
 			list.add("1라운드를 시작하겠습니다.");
 			String currentCoin= String.format("User 코인: %d, Ai 코인: %d",game.getUser().getUserCoin(),game.getAi().getAiCoin());
 			list.add(currentCoin);
-			String betFirstMsg = first == 1 ? "사용자가 먼저 배팅을 시작합니다." : "Ai가 먼저 배팅을 시작합니다.";
+			String betFirstMsg = first == 1 ? "사용자가 먼저 배팅을 시작합니다 15초 시간제한있습니다!배팅안하면 자동으로 배팅됩니다" : "Ai가 먼저 배팅을 시작합니다.";
 			list.add(betFirstMsg);
-			if(first ==1) //사용자 팅 시작
+			if(first ==1) //사용자 배팅 시작
 			{
-				
+				//사용자한테 배팅할 시간을 준다음에  배팅할 시간이 지나면 알아서 배팅이되고 AI차례로 넘어오는거 구현하기
+				Timer timer = new Timer();
+				TimerTask task = new TimerTask()
+				{
+					@Override
+					public void run()
+					{	
+						String msg = String.format("사용자가 배팅될 코인의 수는 -> %d", game.getUser().autoBetCoin((int)(Math.random()*3)+1));
+						list.add(msg);
+						//aiBattingBattle이 aiDiePercentage보다 더크다면 -> 배팅할 확률이 더크다면
+						if(game.getAi().aiBattingBattle(game.getUser().number(game)) > game.getAi().aiDiePercentage(game.getUser().number(game)))
+						{
+							String ai = String.format("ai가 배팅한 코인 수는 -> %d", game.getAi().aiBattingBattle(game.getUser().number(game)));
+							game.getAi().aiBetCoin(game.getAi().aiBattingBattle(game.getUser().number(game)));
+							list.add(ai);
+						}
+						else //죽을 확률이 더크다면
+						{
+							String message = "ai가  고민 하더니 다이했습니다";
+							game.getUser().setCoin(game.getUser().getUserCoin()+1);
+							game.getAi().aiBetCoin(1);
+							list.add(message);
+						}
+					}
+				};
+				timer.schedule(task, 15000);
 			}
 			else //ai 배팅 시작
 			{

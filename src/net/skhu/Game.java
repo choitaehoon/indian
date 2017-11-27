@@ -43,8 +43,5 @@ public class Game {
 	{
 		return user.getUserCoin()<=0 ? "ai가 승리하고 user가 졌습니다" : "user가 승리하고 ai가 졌습니다";
 	}
-	
-	
-	
 
 }

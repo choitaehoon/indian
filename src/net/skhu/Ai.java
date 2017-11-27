@@ -36,7 +36,7 @@ public class Ai {
 	{
 		return this.coin -=coin;
 	}
-	//내카드를 보고 있는 ai가 내카드가 크다면 배팅 갯수적게하고 내카드가 작다면 배팅 갯수 높임
+	//내카드를 보고 있는 ai가 내카드가 크다면 배팅 갯수적게하고 내카드가 작다면 배팅 갯수 높임(배팅할 확률)
 	public int aiBattingBattle(int userCard)
 	{
 		int bet =0;

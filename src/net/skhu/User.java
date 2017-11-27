@@ -35,4 +35,10 @@ public class User {
 	public void setCoin(int coin) {
 		this.coin=coin;
 	}
+	//Timer에 줄 메소드
+	public int autoBetCoin(int bet)
+	{
+		this.coin -=bet;
+		return bet;
+	}
 }
