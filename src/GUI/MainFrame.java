@@ -8,6 +8,7 @@ import java.awt.List;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,6 +34,7 @@ public class MainFrame extends JFrame{
 	private User user;
 	private Ai ai;
 	private int bet;
+	private int die;
 	Button button;
 
 	public MainFrame(Game game) {
@@ -125,13 +127,10 @@ public class MainFrame extends JFrame{
 				inCoin.setText("");
 				String msg="User 배팅="+s;
 				bet=Integer.parseInt(s);
-				if(bet > game.getUser().getUserCoin())//배팅 건 갯수가 더크다면
+				if(bet > game.getUser().getUserCoin()) //배팅 건 갯수가 더크다면
 					list.add("배팅 건 숫자가 더많습니다!");
 				else
-				{
-					game.getUser().betCoin(bet);
 					list.add(msg);
-				}			
 			}
 
 		});
@@ -186,7 +185,7 @@ public class MainFrame extends JFrame{
 			list.add(msg);
 		}
 		else if (game.getRound() == 1) 
-		{
+		{ 
 			int first = ((int) (Math.random() * 2)) +1;
 			list.add("INDIAN 포커에 오신걸 환영합니다.");
 			list.add("1라운드를 시작하겠습니다.");
@@ -204,11 +203,28 @@ public class MainFrame extends JFrame{
 					public void run()
 					{	
 						//내가현재 갖고 있는 코인 수보다 적다면 ->즉  15초 안에 배팅을 걸었다는 얘기 -> 그러면 자동배팅 하면안되게 하는 조건문 
-						if(game.getUser().getUserCoin() > game.getUser().nowBetCoin(bet))
+						if(game.getUser().getUserCoin() > game.getUser().getUserCoin()-bet)
 						{
 							battleAiWithUser();
-							//AI가 배팅을 건다면  그다음은 추가 배팅필요 
-							
+							//AI가 배팅을 건다면  그다음은 추가 배팅필요 ->다이할경우 유저가 승리
+							//AI가 죽은 경우 
+							if(die == 5)
+							{
+								game.getAi().aiBetCoin(1);
+								game.getUser().setCoin(game.getUser().getUserCoin()+1);
+								//다음 라운드를 위해 초기값 으로 돌아옴
+								die = 0;
+								list.add(String.format("이번 %d 라운드 승자는 유저입니다!", game.getRound()));
+							}
+							else //AI가 배팅을 걸었다면
+							{
+								//배팅 카운트 수
+								int bettingCoint = 0;
+								Scanner input = new Scanner(System.in);
+								//추가 배팅할지 안할지 결정하는 변수
+								int number = input.nextInt();
+								
+							}
 						}
 						else //15초이내에 배팅을 못걸었다면
 						{
@@ -218,7 +234,7 @@ public class MainFrame extends JFrame{
 						}
 					}
 				};
-				timer.schedule(task, 4000);
+				timer.schedule(task, 15000);
 			}
 			
 			else //ai 배팅 시작
@@ -249,18 +265,20 @@ public class MainFrame extends JFrame{
 	//AI와 User배팅 싸움
 	public void battleAiWithUser()
 	{
-		//aiBattingBattle이 aiDiePercentage보다 더크다면 -> 배팅할 확률이 더크다면
+		//aiBattingBattle이 aiDiePercentage보다 더크다면 -> 배팅할 확률이 더 크다면
 		if(game.getAi().aiBattingBattle(game.getUser().number(game)) > game.getAi().aiDiePercentage(game.getUser().number(game)))
 		{
-			String ai = String.format("ai가 배팅한 코인 수는 -> %d", game.getAi().aiBattingBattle(game.getUser().number(game)));
-			game.getAi().aiBetCoin(game.getAi().aiBattingBattle(game.getUser().number(game)));
+			String ai = String.format("ai가 배팅한 코인 수는 -> %d", bet = game.getAi().aiBattingBattle(game.getUser().number(game)));
+//			game.getAi().aiBetCoin(game.getAi().aiBattingBattle(game.getUser().number(game)));
 			list.add(ai);
 		}
 		else //죽을 확률이 더크다면
 		{
 			String message = "ai가  고민 하더니 다이했습니다";
-			game.getUser().setCoin(game.getUser().getUserCoin()+1);
-			game.getAi().aiBetCoin(1);
+			//내가 죽었는지 안죽었는지 확인하는 변수 ->숫자5면 죽었다는 소리
+			die =5;
+//			game.getUser().setCoin(game.getUser().getUserCoin()+1);
+//			game.getAi().aiBetCoin(1);
 			list.add(message);
 		}
 	}

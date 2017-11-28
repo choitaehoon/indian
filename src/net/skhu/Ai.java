@@ -36,6 +36,11 @@ public class Ai {
 	{
 		return this.coin -=coin;
 	}
+	//자동배팅 구현 제약 걸기위해 필요한 메소드 ->int형으로 반환해야되서
+	public int nowAiBetCoin(int coin)
+	{
+		return this.coin -= coin;
+	}
 	//내카드를 보고 있는 ai가 내카드가 크다면 배팅 갯수적게하고 내카드가 작다면 배팅 갯수 높임(배팅할 확률)
 	public int aiBattingBattle(int userCard)
 	{
