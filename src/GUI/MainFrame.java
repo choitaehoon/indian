@@ -207,7 +207,7 @@ public class MainFrame extends JFrame{
 						if(game.getUser().getUserCoin() > game.getUser().nowBetCoin(bet))
 						{
 							battleAiWithUser();
-							//AI가 배팅을 건다면  그다음은 추가 배팅필요
+							//AI가 배팅을 건다면  그다음은 추가 배팅필요 
 							
 						}
 						else //15초이내에 배팅을 못걸었다면
