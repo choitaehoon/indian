@@ -35,15 +35,4 @@ public class User {
 	public void setCoin(int coin) {
 		this.coin=coin;
 	}
-	//Timer에 줄 메소드
-	public int autoBetCoin(int bet)
-	{
-		this.coin -=bet;
-		return bet;
-	}
-	//자동배팅 구현 제약 걸기위해 필요한 메소드 ->int형으로 반환해야되서
-	public int nowBetCoin(int bet)
-	{
-		return this.coin -= bet;
-	}
 }
